@@ -44,4 +44,4 @@ Skills:
 
 I'm open to any suggestion, and if we match that will be great. Give it a shot!
 
-[email@domain.com](mailto:adjebali@outlook.com)
+[adjebali@outlook.com](mailto:adjebali@outlook.com)
