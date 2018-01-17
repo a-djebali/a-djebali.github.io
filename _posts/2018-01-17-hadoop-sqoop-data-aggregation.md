@@ -3,10 +3,6 @@ layout: post
 title: Hadoop Sqoop Incremental Aggregations
 ---
 
-# Hadoop Sqoop Incremental Aggregations
-
-## Problem
-
 Assume we have web and mobile applications that store their data into RDBMS like databases (e.g. MySQL, SQL Server, ect.). As the data grows, processing it in RDBMS environments is a bottleneck. If the data is very huge, RDBMS is not feasible. That is where distributed systems help.  For this, we need to bring the data to distributed systems then it becomes easy to process it. The data fetching process should also be fast.
 
 Bringing data to distributed system is not that tedious job, if we have to bring the data from one database. But, in general business applications use different kind of databases. Following are the few problems we would face while bringing data directly.
