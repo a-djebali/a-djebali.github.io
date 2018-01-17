@@ -74,21 +74,21 @@ VALUES ('Teri','Thomas','t_thomas@gmail.com'),
 
 Now, on the other side of the world as a data engineer you want remotely connect, explore, ... ect. the data to be loaded into Hadoop HDFS before writing your Sqoop job. As a first step, you may want to list all the databases that exist in MySQL, we could use the following command:
 
-```linux
-sqoop list-databases --connect jdbc:mysql://localhost/ --username root --password 123456
+```
+$ sqoop list-databases --connect jdbc:mysql://localhost/ --username root --password 123456
 ```
 
 Then all tables within the guests database
 
-```linux
-sqoop list-tables --connect jdbc:mysql://localhost/guests --username root --password 123456
+```
+$ sqoop list-tables --connect jdbc:mysql://localhost/guests --username root --password 123456
 ```
 
 ## Data aggregation
 
 After having the database's credentials for connecting as well you having explored the data, now it's time to fetch the data into Hadoop HDFS. The Following command will do the job:
 
-```linux
+```
 $ sqoop import --connect jdbc:mysql://localhost/guests --username root --password 123456 --table guest_info -m 2 --split-by id --target-dir /tmp/data_staging/guest_info --fields-terminated-by '\001'
 ```
 
@@ -105,7 +105,7 @@ Options used are:
 
 Check whether the data that has been imported into Hadoop HDFS: 
 
-```linux
+```
 $ hadoop dfs -cat /tmp/data_staging/guest_info/*
 ```
 
@@ -123,7 +123,7 @@ INSERT INTO guest_info (firstname, lastname, email) VALUES ('Jery','Raj','jraj@g
 
 So the syntax that is used for the incremental option in Sqoop import is as follows:
 
-```linux 
+``` 
 $ sqoop import --connect jdbc:mysql://localhost/guests --username root --password 123456 --table guest_info -m 2 --split-by id --target-dir /tmp/data_staging/guest_info --fields-terminated-by '\001' --check-column visit_date --incremental append --check-column id --last-value 4
 ```
 
@@ -152,13 +152,13 @@ sqoop import --connect jdbc:mysql://localhost/guests --username root --password 
 
 * Schedule the job using crontab
 
-```unux
+```
 $ crontab -e
 ```
 
 Then at this at the end (e.g. imports done every day at 6am)
 
-```bash
+```
 0 6 * * * /path/to/job.sh
 ```
 
