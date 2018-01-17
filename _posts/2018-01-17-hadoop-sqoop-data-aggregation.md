@@ -24,7 +24,7 @@ For all the challenges mentioned previously, manual intervention is often requir
 
 ## Solution Architecture 
 
-![architecture](https://github.com/a-djebali/hadoop-sqoop-incremental-aggregations/blob/master/architecture.png)
+![architecture](https://raw.githubusercontent.com/a-djebali/hadoop-sqoop-incremental-aggregations/master/architecture.png)
 
 ## Prerequisites
 
