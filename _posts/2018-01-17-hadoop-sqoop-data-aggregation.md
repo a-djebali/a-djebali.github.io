@@ -133,7 +133,7 @@ Here we are going to schedule the previous command using Crontab, so we don't ha
 
 * Create
 
-```linux
+```
 $ nano sqoop_job.sh
 ``` 
 
@@ -152,13 +152,13 @@ sqoop import --connect jdbc:mysql://localhost/guests --username root --password 
 
 * Schedule the job using crontab
 
-```linux
+```unux
 $ crontab -e
 ```
 
 Then at this at the end (e.g. imports done every day at 6am)
 
-```
+```bash
 0 6 * * * /path/to/job.sh
 ```
 
