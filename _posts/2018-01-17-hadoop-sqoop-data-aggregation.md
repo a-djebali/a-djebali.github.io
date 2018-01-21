@@ -5,22 +5,22 @@ title: Hadoop Sqoop Incremental Aggregations
 
 Assume we have web and mobile applications that store their data into RDBMS like databases (e.g. MySQL, SQL Server, ect.). As the data grows, processing it in RDBMS environments is a bottleneck. If the data is very huge, RDBMS is not feasible. That is where distributed systems help.  For this, we need to bring the data to distributed systems then it becomes easy to process it. The data fetching process should also be fast.
 
-Bringing data to distributed system is not that tedious job, if we have to bring the data from one database. But, in general business applications use different kind of databases. Following are the few problems we would face while bringing data directly.
+Bringing data to a distributed system is not that tedious job, if we have to bring the data from one database. But, in general business applications use different kind of databases. Following are the few problems we would face while bringing data directly.
 
 * Data cannot be fetched in parallel
 * Need to maintain multiple connectors for different databases
 * Code maintenance
 * Time for code development
-* Need to import data to local then copy it to distributed file systems (Two Step).
-* If we are fetching data incrementally, the last fetched value should be stored and maintained manually.
-* If we want to load data into Hive or HBase, we would need to write different programs and need to maintain them.
-* We need to create tables before hand.
-* Cleansing of data should be done separately.
-* If we need data in specialized file formats, we need to convert with an additional step.
+* Need to import data to local then copy it to distributed file systems (Two Step)
+* If we are fetching data incrementally, the last fetched value should be stored and maintained manually
+* If we want to load data into Hive or HBase, we would need to write different programs and need to maintain them
+* We need to create tables before hand
+* Cleansing of data should be done separately
+* If we need data in a particular file formats, we need additional step to convert it
 
 ## Solution (proposition):
 
-For all the challenges mentioned previously, manual intervention is often required. We need a solution that would take care most of the things to make the data fetching process easy. Sqoop is the tool helps in bulk transferring the data between RDBMS database systems and distributed systems.  [Sqoop](http://sqoop.apache.org/) will take care of all the above problems mentioned. It provides simple command line option, where we can fetch data from different database systems by writing the simple Sqoop command.
+For all the challenges mentioned previously, manual intervention is often required. We need a solution that would take care most of the things to make the data fetching process easy. [Sqoop](http://sqoop.apache.org/) is the tool that helps in bulk transferring the data between RDBMS database systems and distributed systems. [Sqoop](http://sqoop.apache.org/) will take care of all the above problems mentioned. It provides simple command line option, where we can fetch data from different database systems by writing the simple Sqoop command.
 
 ## Solution Architecture 
 
@@ -32,9 +32,9 @@ For all the challenges mentioned previously, manual intervention is often requir
 * Sqoop
 * RDBMS (for this project, MySQL is used as a data source)
 
-## Create a database and table 
+## Create a database and table (RDBMS data source) 
 
-Let's say we have a table in a MySQL database that contains guests information data (first name, last name, email, etc.). And we would like to import the table's data into Hadoop HDFS as well as keeping the same process in timely basis (automated / scheduled imports). 
+Let's say we have a table in a MySQL database that contains guests information data (first name, last name, email, etc.). And we would like to import that data into Hadoop HDFS as well as keeping the same process in timely basis (automated / scheduled imports). 
 
 The guests database, guest_info table as well as the data in it can be done by:
 
@@ -156,7 +156,7 @@ sqoop import --connect jdbc:mysql://localhost/guests --username root --password 
 $ crontab -e
 ```
 
-Then at this at the end (e.g. imports done every day at 6am)
+Then put this at the end (e.g. imports done every day at 6am)
 
 ```
 0 6 * * * /path/to/job.sh
