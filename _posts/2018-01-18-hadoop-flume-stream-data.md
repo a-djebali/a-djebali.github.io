@@ -3,8 +3,6 @@ layout: post
 title: Stream Data into Hadoop using Flume
 ---
 
-# Stream Data into Hadoop HDFS using Flume
-
 We all know that [Sqoop](https://a-djebali.github.io/hadoop-sqoop-data-aggregation/) is a component used to transfer structured data from RDBMS like databases (e.g. MySQL, SQL Server, ect.) to Hadoop HDFS and vice versa (from HDFS to RDBMS). Now, what if we want to load semi-structured and unstructured data into Hadoop HDFS, or live streaming data that is generated from sources like twitter, facebook, weblogs and more into Hadoop HDFS.
 
 ## Solution (Proposition)
