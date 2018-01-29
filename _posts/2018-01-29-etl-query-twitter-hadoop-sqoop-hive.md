@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ETL and Querying Semi-Unstructured Data using Hive
+title: Querying Semi-Unstructured Data using Hive
 ---
 
 There are five types of data structures 
