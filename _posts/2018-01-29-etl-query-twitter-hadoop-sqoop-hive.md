@@ -5,17 +5,17 @@ title: Querying Semi-Unstructured Data using Hive
 
 There are five types of data structures 
 
-* **Well structured** for example online purchase transactions. Generally can be stored in [RDBMS]() in the form of rows and columns
+* **Well structured** for example online purchase transactions. Generally can be stored in [RDBMS](https://www.tutorialspoint.com/sql/sql-rdbms-concepts.htm) in the form of rows and columns
 * **Incompatibly structured** such as data in Avro, JSON files, XML
-* **Semi-structured** like clickstream in log files (`2017-11-01 14:27:57,944-INFO : com.ovaledge.oasis.dao.DomainDaoImpl`), where we see the structure but require some rules to find the details
+* **Semi-structured** like clickstream in log files (`2017-01-29 14:27:57,944-INFO : com.ovaledge.oasis.dao.DomainDaoImpl`), where we see the structure but require some rules to find the details
 * **Unstructured text data** text written in various forms such as web pages, emails, chat messages, pdf files, word documents, etc.
 * **Fully unstructured** like videos, audio files and pictures
 
-Looking at all the above types that the data can have, the first question that comes in mind when deciding on the right tool for the job is: "How is the data look like?". If your data has a very strict schema, and it doesn't deviate from that schema, then it's just well structured data. Then, maybe you should just be using an RDBMS like MySQL. However, as you start to try to analyze data with less structure or with extremely high volume, systems like MySQL become less useful, and it may become necessary to move out of the relational world.
+Looking at all the above types that the data can have, the first question that comes to mind when deciding on the right tool for the job is: **"How is the data look like?"**. If your data has a very strict schema, and it doesn't deviate from that schema, then it's just well structured data. Then, maybe you should just be using an RDBMS like MySQL. However, as you start to try to analyze data with less structure or with extremely high volume, systems like MySQL become less useful, and it may become necessary to move out of the relational world.
 
 ## Solution (Proposition)
 
-Incompatibly structured, semi-structured, unstructured text data and fully unstructured are all terms for data that doesn't fit well or it doesn't at all into the relational model. What do we do with this data? Here's where [Hive](https://hive.apache.org/) shines. it's a data warehouse software project built on top of Apache Hadoop for providing data summarization, query and analysis. Hive gives a SQL-like interface to query data stored in various databases and file systems that integrate with Hadoop.
+Incompatibly structured, semi-structured, unstructured text data and fully unstructured are all terms for data that doesn't fit well or it doesn't at all into the relational model / RDBMS. What do we do with this data? Here's where [Hive](https://hive.apache.org/) shines. it's a data warehouse software project built on top of Apache Hadoop for providing data summarization, query and analysis. Hive gives a SQL-like interface to query data stored in various databases and file systems that integrate with Hadoop.
 
 It's extremely effective for dealing with data that doesn't quite fit into the RDBMS bucket, because it can process complex, nested types natively. Hive avoids the need for complicated transformations that might be otherwise necessary to handle this sort of data in a traditional relational system. Hive can also gracefully handle records that don't strictly conform to a table's schema. For example, if some columns are missing from a particular record, Hive can deal with the record by treating missing columns as NULLs.
 
@@ -33,7 +33,7 @@ Before moving forward and deploy the data pipeline using big data tools includin
 
 ## Data Source 
 
-For this project, we are going to ETL and query twitter data. And as we already talked on [how to stream twitter data into Hadoop HDFS](https://a-djebali.github.io/hadoop-flume-stream-data/), then that last is our data source. 
+For this project, we are going to summarize, query and analyze twitter data. And as we already talked on [how to stream twitter data into Hadoop HDFS](https://a-djebali.github.io/hadoop-flume-stream-data/), then that last is our data source. 
 
 ## Data Structure (tweet data)
 
@@ -459,17 +459,17 @@ Using the Twitter Streaming API, [we loaded raw tweets into HDFS using Flume](ht
 
 It's fairly easy to see that there is a good bit of complexity to this data structure. Since JSON can contain nested data structures, it becomes very hard to force JSON data into a standard relational schema. Processing JSON data in a relational database would likely require significant transformation, making the job much more cumbersome.
 
-Looking at this particular bit of JSON, there are some very interesting fields: At the very top, there is a 
-* `retweeted_status` indicates that this tweet was retweeted by another user. If it wasn't, you would not have it. 
+Looking at this particular bit of JSON, there are some very interesting fields:
+* `retweeted_status` indicates that this tweet was retweeted by another user. If it wasn't, you wouldn't have it. 
 * `text` tweet's content 
 * `url` tweet url
 * ... etc,
 
-Tweets also contain an entities element, which is a nested structure. It contains three arrays, the elements of which are all nested structures in their own right, as can be seen in the hashtags array, which has two entries. How do we deal with a record like this in Hive?
+Tweets also contain an entities element, which is a nested structure. It contains three arrays, the elements of which are all nested structures in their own right, as can be seen in the hashtags array, which has two entries. **How do we deal with a record like this in Hive?**
 
 ## Complex Data Structures
 
-Hive supports for a set of data structures that normally would either not exist in a relational database, or would require definition of custom types. There are all the usual players: integers, strings, floats, and the like, but the interesting ones are the more exotic maps, arrays, and structs. Maps and arrays work in a fairly intuitive way, similar to how they work in many scripting languages:
+Hive supports for a set of data structures that normally would either not exist in a relational database, or would require definition of custom types. There are all the usual players: `integers`, `strings`, `floats`, and the like, but the interesting ones are the more exotic `maps`, `arrays`, and `structs`. Maps and arrays work in a fairly intuitive way, similar to how they work in many scripting languages:
 
 ```sql
 SELECT array_column[0] FROM table_name;
@@ -491,9 +491,9 @@ In order to store tweets, here is some of columns of the Hive table that was des
 ```sql
 CREATE EXTERNAL TABLE tweets
 (
-	...
-	retweeted_status STRUCT<
-		text:STRING,
+    ...
+    retweeted_status STRUCT<
+	text:STRING,
       	user:STRUCT<screen_name:STRING,name:STRING>>,
     entities STRUCT<
       urls:ARRAY<STRUCT<expanded_url:STRING>>,
@@ -534,7 +534,7 @@ The `ROW FORMAT` clause is the most important one for this table. In simple data
 
 ## Serializers and Deserializers
 
-In Hive, SerDe is an abbreviation for Serializer and Deserializer, and is an interface used by Hive to determine how to process a record. Serializers and Deserializers operate in opposite ways. The Deserializer interface takes a string or binary representation of a record, and translates it into a Java object that Hive can manipulate. The Serializer, on the other hand, will take a Java object that Hive has been working with, and turn it into something that Hive can write to HDFS. Commonly, Deserializers are used at query time to execute `SELECT` statements, and Serializers are used when writing data, such as through an `INSERT-SELECT` statement. In this project, we wrote a JSONSerDe, which can be used to transform a JSON record into something that Hive can process.
+In Hive, SerDe is an abbreviation for Serializer and Deserializer, and is an interface used by Hive to determine how to process a record. Serializers and Deserializers operate in opposite ways. The Deserializer interface takes a string or binary representation of a record, and translates it into a Java object that Hive can manipulate. The Serializer, on the other hand, will take a Java object that Hive has been working with, and turn it into something that Hive can write to HDFS. Commonly, Deserializers are used at query time to execute `SELECT` statements, and Serializers are used when writing data, such as through an `INSERT-SELECT` statement. In this project, we wrote a `JSONSerDe`, which can be used to transform a JSON record into something that Hive can process.
 
 Before moving forward, make sure `json-serde-X.X.X.jar` is in your $HIVE_HOME/lib directory, otherwise download it.
 
@@ -592,7 +592,9 @@ Save, quit and run the HiveQL script using the below command:
 $ hive -f tweet.hql
 ```
 
-This command runs the the twitte.hql file. Once the query completes, you get the prompt. Let's do a quick check, the following query returns a maximum of 10 tweets that contain the word Hive in the message text:
+This command runs the the `tweet.hql` file. Once the query completes, you get the prompt. 
+
+Let's do a quick check, the following query returns a maximum of 10 tweets that contain the word Hive in the message text:
 
 ```sql
 SELECT user.name, user.screen_name, count(1) as cc
@@ -618,7 +620,7 @@ Similarly to know which user has the most number of followers, the below query h
 select user.screen_name, user.followers_count c from tweets order by c desc;
 ```
 
-Boom we have successfully transformed semi-structured data into a structured shape that can be queried, let's talk about more analysis in one of the coming blogs ...
+Boom we have successfully summarized, queried and analyzed semi-structured data using Hive, let's talk about more analysis in one of the coming blogs ...
  
 ## End notes 
 
