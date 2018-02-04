@@ -617,7 +617,7 @@ SELECT t.retweeted_screen_name, sum(retweets) AS total_retweets, count(*) AS twe
 Similarly to know which user has the most number of followers, the below query helps.
 
 ```sql
-select user.screen_name, user.followers_count c from tweets order by c desc;
+SELECT user.screen_name, user.followers_count c FROM tweets order BY c DESC;
 ```
 
 Boom we have successfully summarized, queried and analyzed semi-structured data using Hive, let's talk about more analysis in one of the coming blogs ...
